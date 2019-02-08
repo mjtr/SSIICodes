@@ -1,6 +1,6 @@
 # SSIICodes
-Manejo de Sockets y algoritmos de cifrado en Java para la asignatura SSII
-En cada carpeta está almacenado el código correspondiente a cada sesión así como su archivo README, explicando que hace el código desarrollado.
+Manejo de Sockets y algoritmos de cifrado en Java para la asignatura SSII.
+En cada carpeta está almacenado el código correspondiente a cada sesión, así como su archivo README, explicando el funcionamiento del código desarrollado.
 
 # Proyectos de CiberSeguridad
 

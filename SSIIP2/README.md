@@ -1,0 +1,14 @@
+# Verificador de integridad
+
+En este proyecto he desarrollado mi propio verificador de integridad, para proteger los mensajes que se intercambian entre el cliente y el servidor de los ataques denominados
+“man-in-the-middle” y de “replay”.
+
+Para ello se ha establecido una comunicación-cliente servidor basada en sockets, y se ha usado el algoritmo de protección de integridad HMAC-SHA-256. Asumiendo que el intercambio de claves se produce sin incidencias, el cliente efectuará el envío del mensaje con total normalidad, pero no se enviará solamente dicho mensaje al servidor, sino que el programa añadirá unos mecanismos de seguridad al mensaje para garantizar tanto su integridad como su autenticidad.
+
+Para proteger la integridad y la autenticidad, se ha concatenado dos códigos de verificación a dicho mensaje. El primer código es un conjunto de caracteres aleatorios de 12 cifras, que denominaremos “Nonce”,y cuyo uso es temporal y único. Cuando el cliente crea el mensaje, éste automáticamente pide el Nonce al Servidor, el Servidor se lo proporciona y, a su vez, lo guarda en una base de datos .El segundo código se obtiene a través del mensaje que el cliente envía, una función hash criptográfica (la nombrada anteriormente) y la clave secreta que también hemos comentado anteriormente. El formato del mensaje que envía el cliente tiene entonces la forma: macdelMensaje-nonce-mensaje
+
+El servidor recibirá toda esta información, y lo que hará será separar en tres partes el mensaje. La primera parte es el código hash del mensaje, la segunda es el Nonce y la tercera el mensaje que el cliente ha mandado. Comprobará que el Nonce recibido está en la base de datos, si está, pasa a la segunda fase de verificación, y borra el Nonce utilizado de la base de datos para que no se pueda reutilizar. Si no existe el Nonce recibido en la base de datos desecha el mensaje directamente, consiguiendo evitar así los ataques de “replay”. En la segunda Fase comprueba el código hash. Para ello, el servidor elaborará su propio código hash de la misma forma que el cliente(para ello deben usar la misma función hash y la misma clave), que lo usará para compararlo con el recibido en el mensaje del mismo. Si coinciden, concluimos que el mensaje no ha sido modificado y que está todo correcto, si no coinciden quiere decir que el mensaje o el código hash recibido ha sido alterado, por lo que el mensaje queda descartado.
+
+**El archivo Nonce.txt simula la base de datos de Nonces, el IntegrityVerifierClient la parte del cliente, el IntegrityVerifierServer la parte del servidor, y el Nonce.java se encargar de la creación de Nonces y de guardarlos en la "Base de datos" de Nonces.txt .
+
+**Para lanzar el código, primero tenemos que ejecutar el IntegrityVerifierServer, y posteriormente el IntegrityVerifierClient.  
